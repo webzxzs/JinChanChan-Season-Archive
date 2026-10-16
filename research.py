@@ -1,4 +1,4 @@
-"""金铲铲长期资料研究管线：快照 -> 候选数据 -> 人工核实 -> 五张表。
+"""金铲铲长期资料研究管线：快照 -> 候选数据 -> 人工核实 -> 四张基础表 + 两张派生图鉴表。
 
 只依赖 Python 标准库。不会自动把国际服资料认证为金铲铲国服事实。
 """
@@ -435,6 +435,10 @@ def build(export=True):
             with tmp.open("w",encoding="utf-8-sig",newline="") as f:
                 writer=csv.writer(f);writer.writerow(DISPLAY_HEADERS[tab]);writer.writerows(rows)
             tmp.replace(path)
+    # Read-only derived view: preserve all original mechanism rows / source IDs,
+    # add game-design system classification for the Web and the sixth Excel sheet.
+    import mechanism_catalog
+    mechanism_catalog.build()
     report={"generated":datetime.now(timezone.utc).isoformat(),
         "data_scope":"金铲铲国服中文版；国际TFT参考不进入五张正式表；海克斯强化来自独立官网hex快照",
         "counts":counts,"changes_since_previous_export":changes}
@@ -456,8 +460,9 @@ def build(export=True):
         import importlib.util
         if importlib.util.find_spec("openpyxl"):
             subprocess.run([sys.executable,str(ROOT/"export_augments_excel.py")],check=True)
+            subprocess.run([sys.executable,str(ROOT/"export_mechanism_excel.py")],check=True)
         else:
-            print("海克斯CSV已生成；更新Excel第五张表需安装 openpyxl",file=sys.stderr)
+            print("海克斯与机制CSV已生成；更新Excel末两张表需安装 openpyxl",file=sys.stderr)
     return report
 
 def refresh(season,patch,dry_run=False):
@@ -538,7 +543,7 @@ def mark(season, kind, key, status, source, note):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest="command",required=True)
-    buildp=sub.add_parser("build",help="从已保存快照生成5个CSV并更新Excel")
+    buildp=sub.add_parser("build",help="从已保存快照生成4张基础CSV + 海克斯/机制图鉴CSV并更新Excel")
     buildp.add_argument("--csv-only",action="store_true")
     sub.add_parser("status",help="查看数据覆盖与待核验数量")
     update=sub.add_parser("refresh",help="只按明确版本增量更新一个赛季")

@@ -15,14 +15,14 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "tables"
 WEB = ROOT / "web"
 TABLES = {"units":"棋子.csv","traits":"羁绊与效果.csv","augments":"强化符文.csv",
-          "boards":"棋盘可能效果.csv","seasons":"赛季特色.csv","patches":"官方逐补丁变化.csv"}
+          "boards":"赛季机制图鉴.csv","seasons":"赛季特色.csv","patches":"官方逐补丁变化.csv"}
 ASSETS = ROOT / "source" / "official_jcc_bulk"
 MANIFEST = ASSETS / "manifest.json"
 FIELDS = {
  "units":("棋子名称","技能名称","技能完整效果","羁绊一","羁绊二","羁绊三","赛季名称","赛季编号"),
  "traits":("羁绊名称","羁绊基础说明","各档人数与效果","包含棋子","赛季名称","赛季编号"),
  "augments":("强化名称","强化效果","档位分类","强化ID","赛季名称","赛季编号"),
- "boards":("玩法名称","实际效果","触发条件","玩法类别","赛季名称","赛季编号"),
+ "boards":("玩法名称","实际效果","触发条件","玩法类别","系统大类","机制子类","设计层级","赛季名称","赛季编号"),
  "seasons":("赛季名称","核心特色","代表机制","赛季编号"),
  "patches":("赛季编号","玩法","名称","对象","变更类型","数据ID","上一补丁","下一补丁","旧字段JSON","新字段JSON"),
 }
@@ -119,6 +119,12 @@ class Archive:
  def __init__(self,directory=DATA):
   self.directory=Path(directory);self.lock=threading.RLock();self.stamps=None;self.rows={};self.seasons=[]
   self.media,self.catalog=official_media()
+  signature_path=ROOT/"data"/"season_signatures.json"
+  if signature_path.exists():
+   signatures=json.loads(signature_path.read_text(encoding="utf-8")).get("by_name",{})
+   for entry in self.catalog:
+    if entry["name"] in signatures:
+     entry["signature"]=signatures[entry["name"]]
   coverage_path=ROOT/"data"/"augment_coverage.json"
   if coverage_path.exists():
    metadata=json.loads(coverage_path.read_text(encoding="utf-8"))
@@ -149,7 +155,9 @@ class Archive:
   with self.lock:
    filtered={k:[r for r in v if not season or r.get("赛季编号")==season] for k,v in self.rows.items()}
    status=Counter((r.get("核验状态") or "未知") for rs in filtered.values() for r in rs)
-   return {"counts":{k:len(v) for k,v in filtered.items()},"seasons":self.seasons,"states":dict(status),"scope":season}
+   return {"counts":{k:len(v) for k,v in filtered.items()},"seasons":self.seasons,"states":dict(status),"scope":season,
+           "mechanism_systems":dict(Counter(r.get("系统大类","待分类") for r in filtered["boards"])),
+           "mechanism_subtypes":dict(Counter(r.get("机制子类","未分类") for r in filtered["boards"]))}
  def catalog_data(self):
   self.refresh()
   with self.lock:
@@ -177,7 +185,9 @@ class Archive:
     if key=="augments" and category and not (
         r.get("档位分类","").startswith("赛季特殊") if category=="special"
         else r.get("档位分类")==category):continue
-    if key=="boards" and category and r.get("玩法类别")!=category:continue
+    if key=="boards" and category and (
+        r.get("系统大类")=="羁绊影响的站位" if category=="core"
+        else r.get("系统大类")!=category):continue
     if key=="patches" and category and r.get("对象")!=category:continue
     if q and not any(q in r.get(f,"").casefold() for f in FIELDS[key]):continue
     items.append(r)
@@ -191,7 +201,7 @@ class Archive:
       "statuses":sorted({r.get("核验状态","") for r in self.rows[key] if r.get("核验状态")}),
       "versions":sorted({r.get("配置版本","") for r in self.rows[key] if r.get("配置版本") and (not season or r.get("赛季编号")==season)},key=natural),
       "trait_options":sorted({r.get(f,"") for r in self.rows["units"] if not season or r.get("赛季编号")==season for f in ("羁绊一","羁绊二","羁绊三") if r.get(f)},key=natural) if key=="units" else [],
-      "categories":sorted({r.get({"boards":"玩法类别","patches":"对象","augments":"档位分类"}.get(key,""),"") for r in self.rows[key] if r.get({"boards":"玩法类别","patches":"对象","augments":"档位分类"}.get(key,""),"")}) if key in ("boards","patches","augments") else []}
+      "categories":sorted({r.get({"boards":"系统大类","patches":"对象","augments":"档位分类"}.get(key,""),"") for r in self.rows[key] if r.get({"boards":"系统大类","patches":"对象","augments":"档位分类"}.get(key,""),"")}) if key in ("boards","patches","augments") else []}
 
 class Handler(BaseHTTPRequestHandler):
  archive=None

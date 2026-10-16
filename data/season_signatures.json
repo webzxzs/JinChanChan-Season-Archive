@@ -1,0 +1,103 @@
+{
+  "data_policy": "主题级可核对资料，不代表同名返场玩法和内部S版本逐补丁完全相同；每条独立保留来源",
+  "by_name": {
+    "银河战争": {
+      "title": "星系规则",
+      "rule": "不同对局可以采用不同的星系环境规则，改变开局资源、选秀或其他全局条件。",
+      "player_decision": "针对本局星系条件重新安排经济、装备和升级节奏。",
+      "source_url": "https://game.gtimg.cn/images/lol/act/jkzlk/js/3/3.3.15-S9/galaxy.js",
+      "evidence": "官网配置快照：星系候选列表"
+    },
+    "天选福星": {
+      "title": "天选之人",
+      "rule": "核心角色机制围绕特殊天选弈子与羁绊人数构筑；福星羁绊支持连败积累奖励。",
+      "player_decision": "围绕天选卡调整阵容，并选择是否承担福星连败运营风险。",
+      "source_url": "https://www.sina.cn/news/detail/4854129841936583.html",
+      "evidence": "金铲铲官方微博2023限时赛季介绍；新版返场细节可能不同"
+    },
+    "双城传说": {
+      "title": "海克斯强化",
+      "rule": "对局中多轮选择强化效果，改变经济、阵容或战斗构筑。",
+      "player_decision": "根据牌面与场上状态选择不同的强化方向。",
+      "source_url": "https://www.taptap.cn/moment/207452059857847877",
+      "evidence": "2021国服开发期公告；上线具体阶段及返场以版本实装为准"
+    },
+    "巨龙之巢": {
+      "title": "龙之秘宝与龙神",
+      "rule": "龙之秘宝提供可整体刷新的一组战利品；龙神弈子占用两个人口，具有独特的费用及羁绊计算方式。",
+      "player_decision": "决定是否花金币重刷整套奖励，以及为龙神分配人口和经济。",
+      "source_url": "https://www.taptap.cn/moment/286126196456948084",
+      "evidence": "金铲铲官方玩法调整公告（2022）"
+    },
+    "符文大陆传奇": {
+      "title": "地区传送门与英雄传说之力",
+      "rule": "全体玩家在开局选择地区传送门候选，影响本局全局规则；赛前选择的英雄传说之力会影响强化符文选项。",
+      "player_decision": "在入局前确定强化倾向，并按传送门投票结果改变运营节奏。",
+      "source_url": "https://bbs.4399.cn/thread-view-tid-39865481",
+      "evidence": "金铲铲赛季版本公告（2023）"
+    },
+    "强音对决": {
+      "title": "赛季之星",
+      "rule": "赛季之星通过商店获得，购买时为2星，给予指定羁绊额外人数，并具有专属能力加成。",
+      "player_decision": "决定锁定哪名赛季之星，或卖掉现有赛季之星后转型。",
+      "source_url": "https://www.taptap.cn/moment/476678562343026940",
+      "evidence": "金铲铲官方赛季机制说明（2023）"
+    },
+    "画之灵": {
+      "title": "奇遇事件",
+      "rule": "对局中的特殊奇遇可能发放奖励，也可能改变经济、战斗或商店规则。",
+      "player_decision": "响应每局遭遇的不同奇遇，调整即时经营与布阵。",
+      "source_url": "https://m.3839.com/gamehistorylog/114071.htm",
+      "evidence": "金铲铲历史版本更新日志（2024）"
+    },
+    "魔法乱斗": {
+      "title": "随机法杖",
+      "rule": "对局商店中出现可购买的一次性法杖效果，可提供临时战力、道具或经济变化。",
+      "player_decision": "权衡购买法杖的金币成本与当前回合收益。",
+      "source_url": "https://community-cn.honor.com/cngm/game/topicdetail/topicid-3612326783713280",
+      "evidence": "2024赛季攻略团机制前瞻；具体刷新频率以版本为准"
+    },
+    "双城传说2": {
+      "title": "异常突变",
+      "rule": "在特定阶段为选定弈子挑选独特的异常突变效果。",
+      "player_decision": "选择强化目标与突变属性，让核心弈子匹配阵容路线。",
+      "source_url": "https://bbs.4399.cn/thread-view-tid-47156998",
+      "evidence": "金铲铲4.23赛季更新公告"
+    },
+    "赛博城市": {
+      "title": "黑客攻击",
+      "rule": "黑客事件会以不同形式干预强化符文、商店、装备和部分经济规则。",
+      "player_decision": "根据本局遭遇的黑客规则调整强化选择、资源配置与成长节奏。",
+      "source_url": "https://news.17173.com/content/03202025/163613503.shtml",
+      "evidence": "金铲铲赛季介绍转载（2025）"
+    },
+    "天下无双格斗大会": {
+      "title": "强化果实",
+      "rule": "强化果实为指定弈子提供个人强化选项，所选效果与弈子能力相配合。",
+      "player_decision": "将有限的果实投入哪些单位，并在必要时拆除或转移强化。",
+      "source_url": "https://www.taptap.cn/moment/701732266602137348",
+      "evidence": "金铲铲官方赛季玩法介绍（2025）"
+    },
+    "英雄联盟传奇": {
+      "title": "可解锁弈子",
+      "rule": "部分英雄需要先满足专属对局条件，解锁后才会加入自己的可刷新卡池。",
+      "player_decision": "围绕阵容和时间成本选择解锁目标，规划商店刷新与后期构筑。",
+      "source_url": "https://www.taptap.cn/moment/742377414906087979",
+      "evidence": "金铲铲官方赛季玩法概览（2025）"
+    },
+    "星神": {
+      "title": "星神恩赐",
+      "rule": "通过星神选择获得资源与装备方向的奖励，替代部分旧赛季选秀路径。",
+      "player_decision": "选择所追随的星神及其恩赐方向，调整装备与阵容规划。",
+      "source_url": "https://news.17173.com/content/08202026/112813727.shtml",
+      "evidence": "金铲铲团队赛季回顾转载（2026）"
+    },
+    "自然之力": {
+      "title": "自然仙灵",
+      "rule": "赛季提供大量自然仙灵的一次性或临时效果，可改变局内战斗、经济与资源获得方式。",
+      "player_decision": "根据仙灵刷新和临时效果调整当前回合经营与战斗安排。",
+      "source_url": "https://www.cgames.com/contents/2/12579.html",
+      "evidence": "2026赛季设计师采访报道"
+    }
+  }
+}
