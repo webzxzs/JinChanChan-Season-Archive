@@ -1,0 +1,24 @@
+# Game publisher raw snapshots and research caches are fetched locally, not mirrored here.
+/source/
+/.runtime/
+/__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.venv/
+/venv/
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# Old working exports, local backups and diagnostics.
+/金铲铲历届赛季_资料库_S1-S18.xlsx
+/web/proof-*.png
+/web/preview-*.png
+/web/offline-*.png
+/tables/*.tmp

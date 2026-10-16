@@ -1,0 +1,126 @@
+{
+  "generated": "2026-10-16T03:57:24.148931+00:00",
+  "data_scope": "金铲铲国服中文版；国际TFT参考数据仅保存在原始快照，不进入四张表",
+  "counts": {
+    "1": {
+      "units": 57,
+      "traits": 24,
+      "version": "历史参考页面（2026-10-15采集）"
+    },
+    "2": {
+      "units": 58,
+      "traits": 27,
+      "version": "历史参考页面（2026-10-15采集）"
+    },
+    "3": {
+      "units": 57,
+      "traits": 24,
+      "version": "10.14"
+    },
+    "4": {
+      "units": 58,
+      "traits": 26,
+      "version": "10.24"
+    },
+    "5": {
+      "units": 59,
+      "traits": 27,
+      "version": "11.13"
+    },
+    "6": {
+      "units": 59,
+      "traits": 28,
+      "version": "12.2"
+    },
+    "7": {
+      "units": 58,
+      "traits": 28,
+      "version": "12.16"
+    },
+    "8": {
+      "units": 59,
+      "traits": 27,
+      "version": "13.4"
+    },
+    "9": {
+      "units": 69,
+      "traits": 28,
+      "version": "13.16"
+    },
+    "10": {
+      "units": 60,
+      "traits": 29,
+      "version": "14.2"
+    },
+    "11": {
+      "units": 60,
+      "traits": 26,
+      "version": "14.10"
+    },
+    "12": {
+      "units": 60,
+      "traits": 27,
+      "version": "14.18"
+    },
+    "13": {
+      "units": 60,
+      "traits": 26,
+      "version": "2026-10-15"
+    },
+    "14": {
+      "units": 60,
+      "traits": 26,
+      "version": "2026-10-15"
+    },
+    "15": {
+      "units": 65,
+      "traits": 26,
+      "version": "2026-10-15"
+    },
+    "16": {
+      "units": 100,
+      "traits": 48,
+      "version": "2026-10-15"
+    },
+    "17": {
+      "units": 64,
+      "traits": 43,
+      "version": "2026-10-15"
+    },
+    "18": {
+      "units": 65,
+      "traits": 35,
+      "version": "2026-10-15"
+    },
+    "official_index_coverage": {
+      "available": 39,
+      "missing": 1,
+      "incomplete": 1,
+      "units": 2624,
+      "traits": 1260,
+      "mechanisms": 1557
+    }
+  },
+  "changes_since_previous_export": {
+    "棋子": {
+      "added": 0,
+      "changed": 0,
+      "removed": 0
+    },
+    "羁绊与效果": {
+      "added": 0,
+      "changed": 0,
+      "removed": 0
+    },
+    "棋盘可能效果": {
+      "added": 0,
+      "changed": 0,
+      "removed": 0
+    },
+    "赛季特色": {
+      "added": 0,
+      "changed": 0,
+      "removed": 0
+    }
+  }
+}

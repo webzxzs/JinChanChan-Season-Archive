@@ -1,0 +1,647 @@
+{
+  "_about": "研究笔记：待核验的人工假设，不是国服权威证据。请按引用逐条确认后修改状态。",
+  "seasons": {
+    "1": {
+      "cn": "TFT S1原型（非国服时空裂痕棋子表）",
+      "en": "Beta Set",
+      "feature": "国际服S1快照。国服时空裂痕有独立棋子称谓、羁绊数值及装备",
+      "review": "待国服核验",
+      "sources": [
+        "https://www.taptap.cn/moment/179901786868417227",
+        "https://weibo.com/ttarticle/p/show?id=2309404674858704568661"
+      ]
+    },
+    "2": {
+      "cn": "TFT S2元素崛起（国服对应待核）",
+      "en": "Rise of the Elements",
+      "feature": "元素棋盘格与地形属性",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "3": {
+      "cn": "银河战争",
+      "en": "Galaxies",
+      "feature": "星系规则随机改变整场对局",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "4": {
+      "cn": "命运之轮",
+      "en": "Fates",
+      "feature": "天选之人：商店特殊高星羁绊棋子",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "5": {
+      "cn": "TFT S5光明与黑暗（不是国服S5.5）",
+      "en": "Reckoning",
+      "feature": "2021国服首发的英雄之黎明对应S5.5；此处为TFT S5快照",
+      "review": "待国服核验",
+      "sources": [
+        "https://www.taptap.cn/moment/179901786868417227"
+      ]
+    },
+    "6": {
+      "cn": "TFT S6双城之战（国服双城传说）",
+      "en": "Gizmos & Gadgets",
+      "feature": "海克斯强化首次引入",
+      "review": "待国服核验",
+      "sources": [
+        "https://www.taptap.cn/moment/207452059857847877",
+        "https://www.taptap.cn/moment/198142128927279376"
+      ]
+    },
+    "7": {
+      "cn": "巨龙之巢",
+      "en": "Dragonlands",
+      "feature": "巨龙单位与秘宝龙",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "8": {
+      "cn": "怪兽来袭",
+      "en": "Monsters Attack!",
+      "feature": "英雄强化与怪兽棋子",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "9": {
+      "cn": "符文大陆传奇",
+      "en": "Runeterra Reforged",
+      "feature": "地区传送门与英雄传说之力",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "10": {
+      "cn": "强音争霸",
+      "en": "Remix Rumble",
+      "feature": "赛季乐队和赛季之星",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "11": {
+      "cn": "画之灵",
+      "en": "Inkborn Fables",
+      "feature": "奇遇改变对局过程",
+      "review": "待国服核验",
+      "sources": [
+        "https://bbs.4399.cn/thread-view-tid-54193469",
+        "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad"
+      ]
+    },
+    "12": {
+      "cn": "魔法乱斗",
+      "en": "Magic n' Mayhem",
+      "feature": "商店随机法杖与一次性法术",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "13": {
+      "cn": "双城之战2",
+      "en": "Into the Arcane",
+      "feature": "异变机制强化指定弈子",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "14": {
+      "cn": "赛博之城",
+      "en": "Cyber City",
+      "feature": "黑客机制改变商店与奖励规则",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "15": {
+      "cn": "天下无双格斗大赛",
+      "en": "K.O. Coliseum",
+      "feature": "强化果实和格斗主题",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "16": {
+      "cn": "符文大陆传奇",
+      "en": "Lore & Legends",
+      "feature": "解锁特殊弈子和符文大陆剧情",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "17": {
+      "cn": "星神",
+      "en": "Space Gods",
+      "feature": "星神领域替代部分选秀并提供神祇恩赐",
+      "review": "待国服核验",
+      "sources": []
+    },
+    "18": {
+      "cn": "自然之力",
+      "en": "Enchanted Wilds",
+      "feature": "自然仙灵与棋盘地形交互",
+      "review": "待国服核验",
+      "sources": [
+        "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad"
+      ]
+    }
+  },
+  "mechanisms": [
+    {
+      "season": 1,
+      "name": "经典棋盘/选秀",
+      "effect": "早期基本棋盘，无独立元素格；主要围绕站位、装备选秀、普通羁绊",
+      "trigger": "整局",
+      "scope": "基本规则",
+      "source_url": "https://tftset.com/set/1-beta-set",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 2,
+      "name": "元素格：炼狱",
+      "effect": "火元素格：站在格上的棋子得到攻速加成",
+      "trigger": "开局随机元素；对称位置出现",
+      "scope": "格内单位",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/TFT:Rise_of_the_Elements",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 2,
+      "name": "元素格：海洋",
+      "effect": "水元素格：获得额外初始法力",
+      "trigger": "开局/中期生成",
+      "scope": "格内单位",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/TFT:Rise_of_the_Elements",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 2,
+      "name": "元素格：山脉",
+      "effect": "土元素格：战斗中生命加成",
+      "trigger": "开局/中期生成",
+      "scope": "格内单位",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/TFT:Rise_of_the_Elements",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 2,
+      "name": "元素格：云霄",
+      "effect": "风元素格：获得闪避等防御属性",
+      "trigger": "开局/中期生成",
+      "scope": "格内单位",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/TFT:Rise_of_the_Elements",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 3,
+      "name": "星系规则",
+      "effect": "每局可进入不同星系，更改初始资源、选秀或经济规则；不是固定地格",
+      "trigger": "对局开始",
+      "scope": "整场玩家",
+      "source_url": "https://teamfighttactics.leagueoflegends.com/en-au/news/dev/dev-introducing-tft-galaxies/",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 4,
+      "name": "天选之人",
+      "effect": "特定商店棋子以高星出现，指定羁绊按更多人数计算；不是棋盘地格",
+      "trigger": "商店随机刷新",
+      "scope": "单个棋子/羁绊",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 5,
+      "name": "黑暗装备",
+      "effect": "特殊组件组合生成带正负效果的装备；赛季中期改为光明装备",
+      "trigger": "获得装备时",
+      "scope": "装备携带者",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 6,
+      "name": "海克斯强化",
+      "effect": "2021国服双城传说每局有三轮海克斯强化选择；官方开发期曾公告1-3、3-5、5-1（实际版本以实装为准）",
+      "trigger": "2021国服开发公告1-3/3-5/5-1",
+      "scope": "全局经济/阵容/战斗",
+      "source_url": "https://www.taptap.cn/moment/207452059857847877",
+      "review": "已核实",
+      "variant": "2021国服1.22",
+      "evidence_url": "https://www.taptap.cn/moment/198142128927279376",
+      "reviewed_on": "2026-10-15"
+    },
+    {
+      "season": 7,
+      "name": "巨龙占位",
+      "effect": "巨龙弈子占两个部署人口槽，羁绊贡献和费用特殊",
+      "trigger": "布阵时",
+      "scope": "布阵人口与羁绊",
+      "source_url": "https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/dragonlands-set-mechanics-overview/",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 7,
+      "name": "秘宝龙",
+      "effect": "在固定关卡给出一组道具与战利品，可花金币整体刷新",
+      "trigger": "4-7等指定回合",
+      "scope": "全局资源",
+      "source_url": "https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/dragonlands-set-mechanics-overview/",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 8,
+      "name": "英雄强化",
+      "effect": "选择特定弈子的专属强化，可能使其成为主C或团队辅助；不是固定格效果",
+      "trigger": "强化选择阶段",
+      "scope": "指定英雄或团队",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 9,
+      "name": "地区传送门",
+      "effect": "入局投票决定地区规则，影响资源/经济/装备等；非固定格效果",
+      "trigger": "开局投票",
+      "scope": "整场玩家",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 10,
+      "name": "赛季之星",
+      "effect": "商店中带羁绊加成的强力高星单位，音乐羁绊决定战斗节奏",
+      "trigger": "商店刷新",
+      "scope": "单卡与阵容",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 11,
+      "name": "奇遇",
+      "effect": "不同弈子触发的事件随机改变奖励、商店、选秀或战斗规则",
+      "trigger": "对局中随机出现",
+      "scope": "玩家或全局",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 11,
+      "name": "2026返场：绘境地格",
+      "effect": "在2-5、3-5、4-5从候选格中选择并自由放置战力/经济/陷阱格；仅限2026返场版本",
+      "trigger": "2-5/3-5/4-5",
+      "scope": "放置地格及所属单位",
+      "source_url": "https://bbs.4399.cn/thread-view-tid-54193469",
+      "review": "已核实",
+      "variant": "2026返场",
+      "evidence_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "reviewed_on": "2026-10-15",
+      "note": "限2026返场，2024初版不能套用"
+    },
+    {
+      "season": 12,
+      "name": "法杖",
+      "effect": "商店随机出现可购买的一次性魔法，改变当前回合的经济或战斗",
+      "trigger": "商店刷新",
+      "scope": "回合/全队",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 13,
+      "name": "异变",
+      "effect": "在指定阶段选择一名弈子获得持续生效的特殊异变效果",
+      "trigger": "中后期",
+      "scope": "指定弈子",
+      "source_url": "https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/mechanics-into-the-arcane/",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 14,
+      "name": "黑客改写",
+      "effect": "赛博黑客事件改变商店、强化、选秀或资源分配规则，不代表所有棋盘位置都有格子加成",
+      "trigger": "随机事件",
+      "scope": "全局/随机对象",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 15,
+      "name": "强化果实",
+      "effect": "给指定弈子使用特殊强化道具，在强化菜单中选择成长能力",
+      "trigger": "获得强化果实时",
+      "scope": "指定单位",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 16,
+      "name": "解锁弈子",
+      "effect": "满足特定羁绊、棋盘上阵或经济条件后，解锁隐藏商店弈子",
+      "trigger": "满足条件时",
+      "scope": "商店/阵容",
+      "source_url": "https://tftset.com/sets",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 17,
+      "name": "星神领域",
+      "effect": "选秀被星神领域事件部分替代，选择神祇并获得不同神力或馈赠",
+      "trigger": "特定回合",
+      "scope": "全局/单位",
+      "source_url": "https://www.gamersky.com/news/202604/2130414.shtml",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 18,
+      "name": "自然仙灵",
+      "effect": "国服自然之力含200多种自然仙灵，给予各种增益；完整列表与逐项数值尚待补证",
+      "trigger": "赛季对局内获得自然仙灵",
+      "scope": "经济/战斗",
+      "source_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "review": "已核实",
+      "variant": "2026自然之力",
+      "evidence_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "reviewed_on": "2026-10-15"
+    },
+    {
+      "season": 18,
+      "name": "艾翁地形改造",
+      "effect": "艾翁技能机制改造地格，不同棋盘位置附加属性或作战效果；属单位带来的站位玩法",
+      "trigger": "艾翁释放技能/使用种子",
+      "scope": "指定地格及上阵单位",
+      "source_url": "https://3g.ali213.net/news/html/1032951.html",
+      "review": "待国服核验",
+      "variant": "原赛季待核验"
+    },
+    {
+      "season": 1,
+      "name": "国服时空裂痕：古代装备",
+      "effect": "2021资料有8种古代装备，如降星刀、沉默刀、幻影之舞；与国际S1道具不完全相同",
+      "trigger": "装备环节",
+      "scope": "装备",
+      "source_url": "https://www.taptap.cn/moment/179242560508661181",
+      "review": "待国服核验",
+      "variant": "2021国服首发"
+    },
+    {
+      "season": 8,
+      "name": "2026返场：城市守护者",
+      "effect": "2026怪兽入侵返场开局获得守护者蛋，孵化提供战力/经济两种形态，非原版S8",
+      "trigger": "返场开局",
+      "scope": "全局经济/战斗",
+      "source_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "review": "已核实",
+      "variant": "2026返场",
+      "evidence_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "reviewed_on": "2026-10-15"
+    },
+    {
+      "season": 11,
+      "name": "2026返场：狂风奇遇",
+      "effect": "2026返场可能出现所有棋子1金币，商店刷出2/3星等规则；不同奇遇效果各异",
+      "trigger": "返场开局奇遇",
+      "scope": "商店/经济/对战",
+      "source_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "review": "已核实",
+      "variant": "2026返场",
+      "evidence_url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad",
+      "reviewed_on": "2026-10-15"
+    },
+    {
+      "season": 4,
+      "name": "2022国服福星临门：天选之人",
+      "effect": "官方活动公告：带天选的棋子在商店出现时为2星，且其其中一个羁绊在计算时算作2人；活动分标准/集福模式。",
+      "trigger": "商店出现天选弈子时",
+      "scope": "单名弈子/羁绊计算",
+      "source_url": "https://www.taptap.cn/moment/235086017227392687",
+      "evidence_url": "https://www.taptap.cn/moment/235086017227392687",
+      "review": "已核实",
+      "reviewed_on": "2026-10-15",
+      "variant": "2022-01-25至2022-02-24国服限时玩法"
+    }
+  ],
+  "national_research": {
+    "as_of": "2026-10-15",
+    "rule": "TFT数据是研究候选，不是国服正式认证；按版本及玩法分轨，不覆盖原始快照。",
+    "mapping": [
+      {
+        "cn": "时空裂痕",
+        "tft": "S1原型但有独立改动",
+        "when": "2021-08-26",
+        "facts": "2021首发双赛季之一，有独立排位、称谓和羁绊效果",
+        "sources": [
+          "https://www.taptap.cn/moment/179901786868417227",
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661"
+        ]
+      },
+      {
+        "cn": "英雄之黎明",
+        "tft": "S5.5（不是S5）",
+        "when": "2021-08-26",
+        "facts": "与时空裂痕首发并行",
+        "sources": [
+          "https://www.taptap.cn/moment/179901786868417227",
+          "https://m.ali213.net/news/gl2108/680957.html"
+        ]
+      },
+      {
+        "cn": "双城传说",
+        "tft": "S6",
+        "when": "2021-11-10",
+        "facts": "在1.22取代英雄之黎明排位；时空裂痕保留独立入口并更新；推出海克斯强化",
+        "sources": [
+          "https://www.taptap.cn/moment/207452059857847877",
+          "https://www.taptap.cn/moment/198142128927279376"
+        ]
+      },
+      {
+        "cn": "画之灵2026返场",
+        "tft": "S11回归，新增机制",
+        "when": "2026-09-29",
+        "facts": "新绘境地格与狂风奇遇不属于原版2024 S11",
+        "sources": [
+          "https://bbs.4399.cn/thread-view-tid-54193469",
+          "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad"
+        ]
+      },
+      {
+        "cn": "自然之力",
+        "tft": "S18",
+        "when": "2026年，开服日期待补",
+        "facts": "国服自然仙灵200多种；具体数值不能由国际服全权替代",
+        "sources": [
+          "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301?platform=ipad"
+        ]
+      }
+    ],
+    "s1_traits": [
+      {
+        "tft": "恶魔",
+        "cn": "仙灵",
+        "difference": "普攻削减对手法力并回复自己法力；历史资料为40%概率扣20点，2/4/6回复15/30/45",
+        "sources": [
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661",
+          "https://www.18183.com/gonglue/202108/3623024.html"
+        ]
+      },
+      {
+        "tft": "极地",
+        "cn": "北地",
+        "difference": "控制持续时间不同，国服同期描述1.5秒眩晕；注意2021年8月与12月公开资料存在数值/档位差异，须按版本分别核实",
+        "sources": [
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661"
+        ]
+      },
+      {
+        "tft": "贵族",
+        "cn": "神将",
+        "difference": "属性强化机制不可视作旧版贵族的直接翻译；注意2021年8月与12月公开资料存在数值/档位差异，须按版本分别核实",
+        "sources": [
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661"
+        ]
+      },
+      {
+        "tft": "海盗",
+        "cn": "豪侠",
+        "difference": "战后经济收益机制有差异；1.22又更新奖励",
+        "sources": [
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661",
+          "https://www.taptap.cn/moment/198142128927279376"
+        ]
+      },
+      {
+        "tft": "刺客",
+        "cn": "潜行者",
+        "difference": "国服战斗开始移动敌后排并获得暴击收益",
+        "sources": [
+          "https://weibo.com/ttarticle/p/show?id=2309404674858704568661",
+          "https://www.18183.com/gonglue/202108/3623024.html"
+        ]
+      }
+    ],
+    "s1_names": {
+      "Vayne": "天罚弩神",
+      "Garen": "不屈战神",
+      "Mordekaiser": "钢铁领主",
+      "Fiora": "华剑战姬",
+      "Nidalee": "西斗之飒",
+      "Warwick": "南天之怒",
+      "Graves": "无畏重炮",
+      "Elise": "蛛后",
+      "Lucian": "驱邪圣枪",
+      "Varus": "迅箭"
+    },
+    "s1_names_source": "https://weibo.com/ttarticle/p/show?id=2309404674858704568661",
+    "note": "以上S1羁绊与译名差异主要有同期媒体资料交叉佐证，具体国服数值仍需官方客户端验收。",
+    "version_discrepancies": [
+      {
+        "cn": "北地",
+        "tft": "Glacial/极地",
+        "observation": "2021-08同期资料：1.5秒晕眩，2/4/6触发概率20%/30%/50%",
+        "dated": "2021-08",
+        "source": "https://www.youxi369.com/gonglue/94377.html",
+        "verdict": "历史资料待核实，不能代表所有补丁"
+      },
+      {
+        "cn": "北地",
+        "tft": "Glacial/极地",
+        "observation": "2021-12-27资料：1.2秒晕眩，2/4/6触发概率20%/30%/50%",
+        "dated": "2021-12",
+        "source": "https://app.ali213.net/gl/759159.html",
+        "verdict": "与8月持续时间不符，是否因版本更新待官方补丁确认"
+      },
+      {
+        "cn": "神将",
+        "tft": "Noble/贵族",
+        "observation": "2021-08同期介绍为3/6羁绊：3名+10双抗自疗10，6名+50双抗全队治疗15",
+        "dated": "2021-08",
+        "source": "https://www.youxi369.com/gonglue/94377.html",
+        "verdict": "历史资料待核实，可能是首发规则"
+      },
+      {
+        "cn": "神将",
+        "tft": "Noble/贵族",
+        "observation": "2021-12-27介绍为3/5/7：分别+10双抗自疗10、+40双抗全队疗10、+65双抗全队疗20",
+        "dated": "2021-12",
+        "source": "https://m.ali213.net/news/gl2112/759171.html",
+        "verdict": "档位与8月不符；不擅自判断差异原因"
+      }
+    ],
+    "warnings": "同一国服模式各补丁可能改档位、数值、棋子池。2021年8月与12月北地/神将资料不同；尚无确证补丁链，不把差异自动视为正式改动。",
+    "s1_firstparty_followup": "已找到config220224中的仙灵30%/北地1.2秒/神将3-5-7；与2021早期媒体差异不抹平，需找官方补丁链。"
+  },
+  "official_research": {
+    "时空裂痕:config220224": {
+      "game": "金铲铲之战",
+      "mode": "时空裂痕",
+      "mode_id": "1",
+      "provider": "腾讯官网直接发布的第一方静态配置（非正式开发者API）",
+      "source_url": "https://game.gtimg.cn/images/jk/jkimg/config220224.json",
+      "raw_sha256": "201efd5f3aabde027ac1d34b0fae16d7c221ac37f976f3ac90b0b7fd42382bf2",
+      "version": "config220224",
+      "unit_count": 58,
+      "trait_count": 25,
+      "board_effects": "此文件不提供完整可枚举的棋盘地格效果，未核实",
+      "validated_scope": "仅核实该腾讯静态配置，不推定2021年首发版本",
+      "next": "英雄之黎明（对应国服setId=5）"
+    },
+    "英雄之黎明:config220224": {
+      "game": "金铲铲之战",
+      "mode": "英雄之黎明",
+      "mode_id": "5",
+      "cn_start": "2021-08-26",
+      "first_party_static_url": "https://game.gtimg.cn/images/jk/jkimg/config220224.json",
+      "official_season_announcement": "https://www.taptap.cn/moment/179901786868417227",
+      "raw_sha256": "201efd5f3aabde027ac1d34b0fae16d7c221ac37f976f3ac90b0b7fd42382bf2",
+      "version": "config220224",
+      "unit_count": 57,
+      "trait_count": 27,
+      "validated_scope": "仅腾讯静态配置config220224；不声称是首发补丁参数",
+      "board_effects": "未获得地格逐项列表，仍待国服官方查证"
+    },
+    "双城传说:config220224": {
+      "game": "金铲铲之战",
+      "mode": "双城传说",
+      "mode_id": "6",
+      "cn_start": "2021-11-10",
+      "first_party_static_url": "https://game.gtimg.cn/images/jk/jkimg/config220224.json",
+      "official_season_announcement": "https://www.taptap.cn/moment/207422196614693113",
+      "raw_sha256": "201efd5f3aabde027ac1d34b0fae16d7c221ac37f976f3ac90b0b7fd42382bf2",
+      "version": "config220224",
+      "unit_count": 60,
+      "trait_count": 28,
+      "validated_scope": "仅腾讯静态配置config220224；不声称是首发补丁参数",
+      "board_effects": "未获得地格逐项列表，仍待国服官方查证"
+    },
+    "福星临门:config220224": {
+      "game": "金铲铲之战",
+      "mode": "福星临门",
+      "mode_id": "4",
+      "cn_start": "2022-01-25",
+      "first_party_static_url": "https://game.gtimg.cn/images/jk/jkimg/config220224.json",
+      "official_season_announcement": "https://www.taptap.cn/moment/234796870474400124",
+      "raw_sha256": "201efd5f3aabde027ac1d34b0fae16d7c221ac37f976f3ac90b0b7fd42382bf2",
+      "version": "config220224",
+      "unit_count": 58,
+      "trait_count": 26,
+      "validated_scope": "仅腾讯静态配置config220224；不声称是首发补丁参数",
+      "board_effects": "未获得地格逐项列表，仍待国服官方查证"
+    }
+  }
+}

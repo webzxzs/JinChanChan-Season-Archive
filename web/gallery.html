@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#0c111a">
+ <meta name="description" content="金铲铲全赛季图鉴：棋子、羁绊、技能、赛季机制及历史版本变化。">
+ <title>铲铲图鉴 · 全赛季资料库</title>
+ <link rel="stylesheet" href="/gallery.css">
+ <script src="/gallery.js" defer></script>
+</head>
+<body>
+<div class="layout">
+ <aside class="sidebar" id="sidebar">
+   <div class="logo"><span class="logo-art">✦</span><div><b>铲铲图鉴</b><small>ALL-SEASON COMPENDIUM</small></div></div>
+   <div class="side-label"><span>赛季资料库</span><span id="season-count">—</span></div>
+   <button class="all-sets" id="all-sets">▦ <span>全部赛季</span><small>总览</small></button>
+   <div class="nav-search"><span>⌕</span><input id="season-query" placeholder="查找赛季或玩法" aria-label="查找赛季" type="search"></div>
+   <nav id="season-nav" aria-label="历史赛季列表"><div class="skeleton">正在加载官方赛季目录…</div></nav>
+   <div class="side-info"><span class="online-dot"></span> 已连接本地研究资料<br><small>保留全部历史模式、返场与缺失记录</small></div>
+ </aside>
+
+ <main class="main">
+  <header class="top">
+   <button id="mobile-menu" class="icon-button mobile-only" aria-label="打开赛季导航">☰</button>
+   <div class="top-location">资料库 <span>／</span> <strong id="breadcrumb">全赛季</strong></div>
+   <div class="top-right"><span class="server-indicator"><i></i> 本地只读</span><button id="reload" class="icon-button" aria-label="刷新数据" title="重新读取本地表">↻</button></div>
+  </header>
+  <div class="page">
+   <section class="season-hero" aria-label="赛季简介">
+    <div class="hero-pattern"></div>
+    <div class="hero-copy">
+     <div class="superlabel"><span>✦</span> GOLDEN SPATULA · SET LIBRARY</div>
+     <h1 id="season-name">全赛季图鉴</h1>
+     <p id="season-desc">从开服经典到最新赛季，一站式查阅所有已收集的棋子与羁绊数据。</p>
+     <div class="season-meta"><span id="season-tag">完整赛季研究库</span><span id="season-version">历史数据与来源可追溯</span><span id="season-availability"></span></div>
+    </div>
+    <div class="hero-emblem" aria-hidden="true"><div>✧</div><span>SEASON ARCHIVE</span></div>
+   </section>
+   <section class="quick-stats" aria-label="当前范围的资料统计">
+    <div><small>弈子 / 棋子</small><strong id="count-units">—</strong></div>
+    <div><small>羁绊</small><strong id="count-traits">—</strong></div>
+    <div><small>玩法机制</small><strong id="count-boards">—</strong></div>
+    <div><small>补丁变化</small><strong id="count-patches">—</strong></div>
+   </section>
+
+   <nav class="tabs" id="tabs" role="tablist" aria-label="资料分类">
+    <button class="tab active" data-tab="units" role="tab" aria-selected="true">♟ 棋子图鉴</button>
+    <button class="tab" data-tab="traits" role="tab" aria-selected="false">✧ 羁绊图鉴</button>
+    <button class="tab" data-tab="boards" role="tab" aria-selected="false">⌗ 赛季机制</button>
+    <button class="tab" data-tab="seasons" role="tab" aria-selected="false">▥ 赛季特色</button>
+    <button class="tab" data-tab="patches" role="tab" aria-selected="false">↗ 补丁变化</button>
+   </nav>
+
+   <div class="filterbar">
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索弈子、羁绊、技能效果…" aria-label="搜索资料"><kbd>/</kbd></label>
+    <select id="trait-filter" aria-label="按羁绊筛选" hidden><option value="">全部羁绊</option></select>
+    <select id="version-filter" aria-label="配置版本"><option value="">全部版本</option></select>
+    <select id="status-filter" aria-label="核验状态"><option value="">所有核验状态</option></select>
+   </div>
+   <div class="costbar" id="costbar">
+    <span class="cost-label">费用</span>
+    <div id="cost-options" class="chiprow">
+     <button class="chip selected" data-cost="">全部</button>
+     <button class="chip" data-cost="1">1 费</button><button class="chip" data-cost="2">2 费</button>
+     <button class="chip" data-cost="3">3 费</button><button class="chip" data-cost="4">4 费</button>
+     <button class="chip" data-cost="5">5 费</button><button class="chip" data-cost="6+">6+ 费</button>
+    </div>
+    <label class="switch"><input type="checkbox" id="show-skills"><span class="track"></span>显示技能</label>
+   </div>
+
+   <div class="results-heading"><h2 id="section-title">弈子一览</h2><span id="result-count">—</span></div>
+   <div id="results" class="results" aria-live="polite"><p class="skeleton">正在加载棋子数据…</p></div>
+   <div id="pager" class="pager"></div>
+   <div class="source-note"><b>资料说明：</b>展示的是所选国服赛季及配置快照。返场玩法与原赛季分开保存；部分棋盘机制为待核实候选，历史版本可能存在差异。<span>｜ 数据源：腾讯官网公开配置及研究证据</span></div>
+   <footer>铲铲图鉴 · 本地历史研究库 <span>非腾讯官方运营网站 · 不展示未经验证的胜率数据</span></footer>
+  </div>
+ </main>
+</div>
+<div id="shade" class="shade" hidden></div>
+<aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-name" hidden>
+ <div class="drawer-top"><span>图鉴详情 / RECORD DETAIL</span><button id="close" aria-label="关闭详情">✕</button></div>
+ <div id="drawer-body"></div>
+</aside>
+<div id="mobile-overlay" class="mobile-overlay" hidden></div>
+</body>
+</html>
