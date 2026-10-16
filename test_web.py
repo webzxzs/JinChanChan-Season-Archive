@@ -88,6 +88,33 @@ class WebTests(unittest.TestCase):
         _, _, raw = self.get("/api/records/units?season=%E5%9B%BD%E6%9C%8DS1%C2%B7%E5%AE%98%E6%96%B9")
         self.assertEqual(json.loads(raw)["total"],58)
 
+    def test_augment_catalog_search_tier_and_season(self):
+        _, _, payload=self.get("/api/summary")
+        self.assertGreaterEqual(json.loads(payload)["counts"]["augments"],10000)
+        _, _, payload=self.get("/api/catalog")
+        catalog=json.loads(payload)["items"]
+        indexed=[x for x in catalog if x["kind"]=="indexed"]
+        self.assertEqual(sum(x.get("augment_count",0)>0 for x in indexed),37)
+        self.assertTrue(any(x["augment_count"]==0 and x["augment_status"] for x in indexed))
+        from urllib.parse import urlencode
+        target=next(x for x in indexed if x["name"]=="自然之力" and x["season"]=="S19")
+        _, _, body=self.get("/api/records/augments?"+urlencode({"season":target["ref"],"limit":60}))
+        rows=json.loads(body)
+        self.assertGreater(rows["total"],250)
+        self.assertTrue(all(r["赛季编号"]==target["ref"] for r in rows["items"]))
+        _, _, body=self.get("/api/records/augments?"+urlencode({"season":target["ref"],"category":"金色","limit":60}))
+        gold=json.loads(body)
+        self.assertGreater(gold["total"],75)
+        self.assertTrue(all(r["官方等级"]=="2" for r in gold["items"]))
+        _, _, body=self.get("/api/records/augments?"+urlencode({"category":"special","limit":60}))
+        special=json.loads(body)
+        self.assertGreater(special["total"],100)
+        self.assertTrue(all(r["官方等级"] not in ("1","2","3") for r in special["items"]))
+        _, _, body=self.get("/api/records/augments?"+urlencode({"q":"存心失利","limit":10}))
+        found=json.loads(body)
+        self.assertGreater(found["total"],0)
+        self.assertTrue(all("存心失利" in r["强化名称"] for r in found["items"]))
+
     def test_web_assets_and_security_boundary(self):
         for uri, token in (("/", b"ALL-SEASON COMPENDIUM"), ("/gallery.js", b"fetch"), ("/gallery.css", b".sidebar")):
             code, headers, raw = self.get(uri)

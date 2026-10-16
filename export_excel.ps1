@@ -1,7 +1,7 @@
 ﻿$ErrorActionPreference = "Stop"
-# 只负责把四份已核对结构的CSV导出为人类可读Excel；不读取网络/不作研究判断。
+# 只负责把已核对结构的国服CSV导出为人类可读Excel；不读取网络/不作研究判断。
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$names = @('棋子','羁绊与效果','棋盘可能效果','赛季特色')
+$names = @('棋子','羁绊与效果','棋盘可能效果','赛季特色','海克斯强化')
 $out = Join-Path $root '金铲铲全赛季研究资料库.xlsx'
 $excel = New-Object -ComObject Excel.Application
 $excel.Visible = $false
@@ -9,8 +9,8 @@ $excel.DisplayAlerts = $false
 $excel.ScreenUpdating = $false
 try {
     $book = $excel.Workbooks.Add()
-    while ($book.Worksheets.Count -lt 4) { $null = $book.Worksheets.Add() }
-    for ($i=0; $i -lt 4; $i++) {
+    while ($book.Worksheets.Count -lt $names.Count) { $null = $book.Worksheets.Add() }
+    for ($i=0; $i -lt $names.Count; $i++) {
         $name = $names[$i]
         $source = Join-Path $root ('tables\' + $name + '.csv')
         $sheet = $book.Worksheets.Item($i+1)
@@ -20,7 +20,7 @@ try {
         $records = @(Import-Csv -LiteralPath $source -Encoding UTF8)
         if ($records.Count -eq 0) { throw "CSV无数据: $name" }
         $headers = @($records[0].PSObject.Properties.Name)
-        $expected = @(21,11,11,10)[$i]
+        $expected = @(21,11,11,10,15)[$i]
         if ($headers.Count -ne $expected) { throw "CSV字段数异常: $name ($($headers.Count) vs $expected)" }
         $matrix = [Array]::CreateInstance([object], [int[]]@(($records.Count+1), $headers.Count))
         for ($col=0; $col -lt $headers.Count; $col++) {
@@ -78,6 +78,13 @@ try {
             $sheet.Columns.Item(4).WrapText = $true
             $sheet.Rows.Item('2:'+($records.Count+1)).RowHeight = 42
         }
+        if ($i -eq 4) {
+            $sheet.Columns.Item(4).ColumnWidth = 25
+            $sheet.Columns.Item(5).ColumnWidth = 75
+            $sheet.Columns.Item(5).WrapText = $true
+            $sheet.Columns.Item(14).ColumnWidth = 56
+            $sheet.Rows.Item('2:'+($records.Count+1)).RowHeight = 43
+        }
         $sheet.Columns.Item($headers.Count-1).ColumnWidth = 38
         $sheet.Activate()
         $excel.ActiveWindow.SplitRow = 1
@@ -85,11 +92,11 @@ try {
         $excel.ActiveWindow.FreezePanes = $true
         $range.Value2 = $matrix
         $table = $sheet.ListObjects.Add(1,$range,$null,1)
-        $table.Name = @('Units','Traits','BoardEffects','SeasonFeatures')[$i]
+        $table.Name = @('Units','Traits','BoardEffects','SeasonFeatures','AugmentCatalog')[$i]
         $table.TableStyle = 'TableStyleMedium2'
         Write-Output ("$name : " + ($range.Rows.Count-1) + " 条")
     }
-    $book.Worksheets.Item(4).Activate()
+    $book.Worksheets.Item(5).Activate()
     # SaveAs replacement affects only this generated research workbook.
     $book.SaveAs($out,51)
     Write-Output "Excel 已更新：$out"

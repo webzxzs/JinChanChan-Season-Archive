@@ -14,17 +14,20 @@ from urllib.parse import parse_qs, urlsplit
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "tables"
 WEB = ROOT / "web"
-TABLES = {"units":"棋子.csv","traits":"羁绊与效果.csv","boards":"棋盘可能效果.csv","seasons":"赛季特色.csv","patches":"官方逐补丁变化.csv"}
+TABLES = {"units":"棋子.csv","traits":"羁绊与效果.csv","augments":"强化符文.csv",
+          "boards":"棋盘可能效果.csv","seasons":"赛季特色.csv","patches":"官方逐补丁变化.csv"}
 ASSETS = ROOT / "source" / "official_jcc_bulk"
 MANIFEST = ASSETS / "manifest.json"
 FIELDS = {
  "units":("棋子名称","技能名称","技能完整效果","羁绊一","羁绊二","羁绊三","赛季名称","赛季编号"),
  "traits":("羁绊名称","羁绊基础说明","各档人数与效果","包含棋子","赛季名称","赛季编号"),
+ "augments":("强化名称","强化效果","档位分类","强化ID","赛季名称","赛季编号"),
  "boards":("玩法名称","实际效果","触发条件","玩法类别","赛季名称","赛季编号"),
  "seasons":("赛季名称","核心特色","代表机制","赛季编号"),
  "patches":("赛季编号","玩法","名称","对象","变更类型","数据ID","上一补丁","下一补丁","旧字段JSON","新字段JSON"),
 }
-NAMES={"units":"棋子名称","traits":"羁绊名称","boards":"玩法名称","seasons":"赛季名称","patches":"名称"}
+NAMES={"units":"棋子名称","traits":"羁绊名称","augments":"强化名称",
+       "boards":"玩法名称","seasons":"赛季名称","patches":"名称"}
 STATIC={"/":"gallery.html","/index.html":"gallery.html","/gallery.css":"gallery.css","/gallery.js":"gallery.js"}
 
 def natural(v):
@@ -116,6 +119,14 @@ class Archive:
  def __init__(self,directory=DATA):
   self.directory=Path(directory);self.lock=threading.RLock();self.stamps=None;self.rows={};self.seasons=[]
   self.media,self.catalog=official_media()
+  coverage_path=ROOT/"data"/"augment_coverage.json"
+  if coverage_path.exists():
+   metadata=json.loads(coverage_path.read_text(encoding="utf-8"))
+   indexed={x["season"]:x for x in metadata.get("coverage",[])}
+   for entry in self.catalog:
+    record=indexed.get(entry["ref"],{})
+    entry["augment_count"]=record.get("count",0)
+    entry["augment_status"]=record.get("status","数据覆盖待核实")
   self.refresh(True)
  def refresh(self,force=False):
   stamps=tuple((k,(self.directory/v).stat().st_mtime_ns) for k,v in TABLES.items())
@@ -163,6 +174,9 @@ class Archive:
     if version and r.get("配置版本")!=version:continue
     if key=="units" and cost and not (number(r.get("费用"),0)>=6 if cost=="6+" else r.get("费用")==cost):continue
     if key=="units" and trait and trait not in (r.get("羁绊一"),r.get("羁绊二"),r.get("羁绊三")):continue
+    if key=="augments" and category and not (
+        r.get("档位分类","").startswith("赛季特殊") if category=="special"
+        else r.get("档位分类")==category):continue
     if key=="boards" and category and r.get("玩法类别")!=category:continue
     if key=="patches" and category and r.get("对象")!=category:continue
     if q and not any(q in r.get(f,"").casefold() for f in FIELDS[key]):continue
@@ -177,7 +191,7 @@ class Archive:
       "statuses":sorted({r.get("核验状态","") for r in self.rows[key] if r.get("核验状态")}),
       "versions":sorted({r.get("配置版本","") for r in self.rows[key] if r.get("配置版本") and (not season or r.get("赛季编号")==season)},key=natural),
       "trait_options":sorted({r.get(f,"") for r in self.rows["units"] if not season or r.get("赛季编号")==season for f in ("羁绊一","羁绊二","羁绊三") if r.get(f)},key=natural) if key=="units" else [],
-      "categories":sorted({r.get("玩法类别" if key=="boards" else "对象","") for r in self.rows[key] if r.get("玩法类别" if key=="boards" else "对象")}) if key in ("boards","patches") else []}
+      "categories":sorted({r.get({"boards":"玩法类别","patches":"对象","augments":"档位分类"}.get(key,""),"") for r in self.rows[key] if r.get({"boards":"玩法类别","patches":"对象","augments":"档位分类"}.get(key,""),"")}) if key in ("boards","patches","augments") else []}
 
 class Handler(BaseHTTPRequestHandler):
  archive=None

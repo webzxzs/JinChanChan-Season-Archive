@@ -1,7 +1,7 @@
 "use strict";
 const $=id=>document.getElementById(id);
-const TABS={units:"弈子一览",traits:"羁绊一览",boards:"赛季机制",seasons:"赛季资料",patches:"补丁变更"};
-const KEY={units:"棋子名称",traits:"羁绊名称",boards:"玩法名称",seasons:"赛季名称",patches:"名称"};
+const TABS={units:"弈子一览",traits:"羁绊一览",augments:"海克斯强化",boards:"赛季机制",seasons:"赛季资料",patches:"补丁变更"};
+const KEY={units:"棋子名称",traits:"羁绊名称",augments:"强化名称",boards:"玩法名称",seasons:"赛季名称",patches:"名称"};
 // Public theme numbering is not always the same as Tencent SDK's internal S-code.
 // Preserve the underlying SDK code alongside these well-known public labels.
 const PUBLIC_SET={"自然之力":"S18","星神":"S17","英雄联盟传奇":"S16",
@@ -9,7 +9,7 @@ const PUBLIC_SET={"自然之力":"S18","星神":"S17","英雄联盟传奇":"S16"
  "魔法乱斗":"S12","画之灵":"S11","强音对决":"S10",
  "符文大陆传奇":"S9","怪兽入侵":"S8","巨龙之巢":"S7",
  "双城传说":"S6"};
-const state={tab:"units",season:"",query:"",trait:"",cost:"",version:"",status:"",page:1,items:[],total:0,pages:0,showSkills:false};
+const state={tab:"units",season:"",query:"",trait:"",cost:"",augment:"",version:"",status:"",page:1,items:[],total:0,pages:0,showSkills:false};
 const zh=new Intl.Collator("zh-CN",{numeric:true,sensitivity:"base"});
 const prior=new URLSearchParams(location.search);
 let catalog=[],activeRequest=0,debounce=0;
@@ -21,6 +21,7 @@ function short(v,max=200){v=String(v??"");return v.length>max?v.slice(0,max)+"�
 function fmt(n){return Number(n||0).toLocaleString("zh-CN");}
 async function get(path){const r=await fetch(path,{cache:"no-store"});if(!r.ok)throw Error("接口返回 "+r.status);return r.json();}
 function paramsForQuery(){const u=new URLSearchParams({season:state.season,q:state.query,trait:state.trait,cost:state.cost,
+ category:state.tab==="augments"?state.augment:"",
  version:state.version,status:state.status,sort:state.tab==="units"?"cost":"name",
  limit:"60",page:String(state.page)});return u;}
 function updateUrl(){const p=new URLSearchParams();if(state.season)p.set("season",state.season);if(state.tab!=="units")p.set("tab",state.tab);
@@ -71,32 +72,36 @@ function setHeading(){
   "包含从首发到当前的国服赛季、限时玩法与返场模式，支持跨赛季检索。";
  $("season-tag").textContent=e?(PUBLIC_SET[e.name]||e.season||"历史研究")+" · 源索引 "+(e.season||"—")+" · 模式 "+(e.mode||"历史"):"所有历史模式";
  $("season-version").textContent=e&&e.version?"配置 "+e.version:"官方历史资料与多版本快照";
- $("season-availability").textContent=e&&e.status==="unavailable"?"历史配置缺失":(e&&e.status==="partial"?"部分数据缺失":"");
+ $("season-availability").textContent=e&&e.status==="unavailable"?"历史配置缺失":(e&&e.status==="partial"?"部分数据缺失":
+  (state.tab==="augments"&&e&&e.augment_status&&e.augment_count===0?e.augment_status:""));
 }
 async function updateCounts(){
  const summary=await get("/api/summary?"+new URLSearchParams({season:state.season}));
- for(const key of ["units","traits","boards","patches"])$("count-"+key).textContent=fmt(summary.counts[key]);
+ for(const key of ["units","traits","augments","boards","patches"])$("count-"+key).textContent=fmt(summary.counts[key]);
 }
 function closeMobile(){$("sidebar").classList.remove("open");$("mobile-overlay").hidden=true;}
 async function chooseSeason(ref){
- state.season=ref;state.page=1;state.query="";state.trait="";state.cost="";state.version="";state.status="";
+ state.season=ref;state.page=1;state.query="";state.trait="";state.cost="";state.augment="";state.version="";state.status="";
  $("search").value="";closeMobile();setHeading();renderNav();
  await updateCounts();await load();
 }
 function chooseTab(tab){
  if(!TABS[tab])return;
- state.tab=tab;state.page=1;state.query="";state.trait="";state.cost="";state.version="";state.status="";
+ state.tab=tab;state.page=1;state.query="";state.trait="";state.cost="";state.augment="";state.version="";state.status="";
  $("search").value="";
  for(const node of document.querySelectorAll("[data-tab]")){
   const active=node.dataset.tab===tab;
   node.classList.toggle("active",active);node.setAttribute("aria-selected",active?"true":"false");
  }
  $("costbar").hidden=tab!=="units";$("trait-filter").hidden=tab!=="units";
+ $("augmentbar").hidden=tab!=="augments";
  $("search").placeholder=({
   units:"搜索弈子、技能、羁绊…",traits:"搜索羁绊名称、人数效果…",
+  augments:"搜索海克斯名称、描述、强化ID…",
   boards:"搜索棋盘、奇遇、站位机制…",seasons:"搜索赛季主题、特色…",
   patches:"搜索英雄、羁绊或变更字段…"})[tab];
  $("section-title").textContent=TABS[tab];load();
+ setHeading();
 }
 function options(id,values,title,selected){
  const el=$(id);el.replaceChildren();
@@ -149,6 +154,18 @@ function infoCard(r,index){
   '<div class="mini-members">'+html(r["核验状态"]||"历史数据")+'</div>')+
   '</article>';
 }
+function augmentCard(r,index){
+ const level=r["官方等级"],tier=r["档位分类"]||"未知等级";
+ const color=level==="1"?"silver":level==="2"?"gold":level==="3"?"prismatic":"special";
+ const icon=validImage(r["图标"]);
+ const label=r["强化名称"]||"未命名强化";
+ return '<article role="button" tabindex="0" class="augment-card '+color+'" data-index="'+index+'" aria-label="查看'+html(label)+'">'+
+  '<div class="augment-icon">'+(icon?'<img loading="lazy" alt="" src="'+html(icon)+'">':'<span>✦</span>')+'</div>'+
+  '<div class="augment-body"><div class="augment-title">'+html(label)+'</div>'+
+  '<span class="augment-tier">'+html(tier)+'</span>'+
+  '<p>'+html(short(r["强化效果"],320))+'</p>'+
+  '<small>'+html(r["赛季名称"]||"")+ ' · '+html(r["配置版本"]||"")+'</small></div></article>';
+}
 function draw(data){
  state.items=data.items;state.total=data.total;state.pages=data.pages;state.page=data.page;
  $("result-count").textContent="共 "+fmt(data.total)+" 条记录 · 第 "+fmt(data.page)+" / "+fmt(Math.max(1,data.pages))+" 页";
@@ -156,7 +173,10 @@ function draw(data){
  options("status-filter",data.statuses||[],"全部核验状态",state.status);
  if(state.tab==="units")options("trait-filter",data.trait_options||[],"全部羁绊",state.trait);
  $("cost-options").querySelectorAll("[data-cost]").forEach(b=>b.classList.toggle("selected",b.dataset.cost===state.cost));
- if(!data.items.length){$("results").innerHTML='<div class="empty"><b>这个范围还没有匹配记录</b>试着清空筛选条件，或者切换其他历史模式查看。<br>缺失的历史配置不会自动用其他赛季数据替代。</div>'; $("pager").innerHTML="";return;}
+ $("augment-options").querySelectorAll("[data-augment]").forEach(b=>b.classList.toggle("selected",b.dataset.augment===state.augment));
+ if(!data.items.length){$("results").innerHTML='<div class="empty"><b>这个范围还没有匹配记录</b>'+
+  (state.tab==="augments"?"该赛季在目前官方快照中没有可用海克斯数据；这不等于玩法里一定没有海克斯。":"试着清空筛选条件，或者切换其他历史模式查看。")+
+  '<br>不同赛季的强化符文不会相互补齐。</div>'; $("pager").innerHTML="";return;}
  if(state.tab==="units"){
   const groups=new Map();
   data.items.forEach((r,i)=>{
@@ -167,6 +187,9 @@ function draw(data){
   });
   $("results").className="results hero-groups";
   $("results").innerHTML=[...groups].sort((a,b)=>Number(a[0])-Number(b[0])).map(([tier,rows])=>tierGroup(rows,tier)).join("");
+ }else if(state.tab==="augments"){
+  $("results").className="results augment-grid";
+  $("results").innerHTML=data.items.map(augmentCard).join("");
  }else{
   $("results").className="results "+(state.tab==="traits"?"list-grid":"feature-grid");
   $("results").innerHTML=data.items.map((r,i)=>state.tab==="traits"?infoCard(r,i):
@@ -190,7 +213,7 @@ function stat(label,v){return v?'<div><small>'+html(label)+'</small><strong>'+ht
 function detailOpen(index){
  const r=state.items[index];if(!r)return;
  let title=r[KEY[state.tab]]||"详情",isUnit=state.tab==="units",isTrait=state.tab==="traits";
- const img=validImage(r["头像"]);
+ const img=validImage(r["头像"]||r["图标"]);
  let head='<div class="detail-head">'+(img?'<img class="detail-pic" src="'+html(img)+'" alt="">':'<div class="detail-pic fallback">✧</div>')+
  '<div class="detail-title"><h2 id="drawer-name">'+html(title)+'</h2><p>'+html(r["赛季名称"]||"")+'<br>'+html(r["配置版本"]||r["下一补丁"]||"历史资料")+'</p></div></div>';
  let content="";
@@ -204,6 +227,12 @@ function detailOpen(index){
  }else if(isTrait){
   content=detailPart("羁绊基础效果",r["羁绊基础说明"])+detailPart("各档人数与增益",String(r["各档人数与效果"]||"").replaceAll("|","\n"))+
    detailPart("包含弈子",r["包含棋子"]);
+ }else if(state.tab==="augments"){
+  content=detailPart("强化符文完整效果",r["强化效果"])+
+   '<section class="detail-section"><h3>强化类别与标识</h3><div class="stats-grid">'+
+   [stat("强化档位",r["档位分类"]),stat("官方等级",r["官方等级"]),
+    stat("强化 ID",r["强化ID"]),stat("英雄强化类型",r["英雄强化类型"]),
+    stat("传说强化标记",r["是否传说强化"]),stat("羁绊关联",r["羁绊关联ID"])].join("")+'</div></section>';
  }else if(state.tab==="boards")content=detailPart("机制完整效果",r["实际效果"])+detailPart("触发条件",r["触发条件"])+detailPart("影响范围",r["影响范围"]);
  else if(state.tab==="seasons")content=detailPart("赛季特色",r["核心特色"])+detailPart("代表机制",r["代表机制"]);
  else{
@@ -233,6 +262,10 @@ function bind(){
   const b=e.target.closest("[data-cost]");if(!b)return;
   state.cost=b.dataset.cost;state.page=1;load();
  });
+ $("augment-options").addEventListener("click",e=>{
+  const b=e.target.closest("[data-augment]");if(!b)return;
+  state.augment=b.dataset.augment;state.page=1;load();
+ });
  $("show-skills").addEventListener("change",e=>{state.showSkills=e.target.checked;load();});
  $("results").addEventListener("click",e=>{const card=e.target.closest("[data-index]");if(card)detailOpen(Number(card.dataset.index));});
  $("results").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-index]")){e.preventDefault();detailOpen(Number(e.target.dataset.index));}});
@@ -256,6 +289,7 @@ async function start(){
   $("search").value=state.query;
   document.querySelectorAll("[data-tab]").forEach(b=>{const active=b.dataset.tab===state.tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});
   $("costbar").hidden=state.tab!=="units";$("trait-filter").hidden=state.tab!=="units";
+  $("augmentbar").hidden=state.tab!=="augments";
   $("section-title").textContent=TABS[state.tab];renderNav();setHeading();await updateCounts();await load();
  }catch(e){error(e);}
 }

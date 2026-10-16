@@ -39,6 +39,7 @@
    <section class="quick-stats" aria-label="当前范围的资料统计">
     <div><small>弈子 / 棋子</small><strong id="count-units">—</strong></div>
     <div><small>羁绊</small><strong id="count-traits">—</strong></div>
+    <div><small>海克斯强化</small><strong id="count-augments">—</strong></div>
     <div><small>玩法机制</small><strong id="count-boards">—</strong></div>
     <div><small>补丁变化</small><strong id="count-patches">—</strong></div>
    </section>
@@ -46,6 +47,7 @@
    <nav class="tabs" id="tabs" role="tablist" aria-label="资料分类">
     <button class="tab active" data-tab="units" role="tab" aria-selected="true">♟ 棋子图鉴</button>
     <button class="tab" data-tab="traits" role="tab" aria-selected="false">✧ 羁绊图鉴</button>
+    <button class="tab" data-tab="augments" role="tab" aria-selected="false">✦ 海克斯强化</button>
     <button class="tab" data-tab="boards" role="tab" aria-selected="false">⌗ 赛季机制</button>
     <button class="tab" data-tab="seasons" role="tab" aria-selected="false">▥ 赛季特色</button>
     <button class="tab" data-tab="patches" role="tab" aria-selected="false">↗ 补丁变化</button>
@@ -67,11 +69,21 @@
     </div>
     <label class="switch"><input type="checkbox" id="show-skills"><span class="track"></span>显示技能</label>
    </div>
+   <div class="costbar" id="augmentbar" hidden>
+    <span class="cost-label">强化档位</span>
+    <div id="augment-options" class="chiprow">
+     <button class="chip selected" data-augment="">全部</button>
+     <button class="chip" data-augment="银色">银色</button>
+     <button class="chip" data-augment="金色">金色</button>
+     <button class="chip" data-augment="彩色">彩色</button>
+     <button class="chip" data-augment="special">特殊等级</button>
+    </div>
+   </div>
 
    <div class="results-heading"><h2 id="section-title">弈子一览</h2><span id="result-count">—</span></div>
    <div id="results" class="results" aria-live="polite"><p class="skeleton">正在加载棋子数据…</p></div>
    <div id="pager" class="pager"></div>
-   <div class="source-note"><b>资料说明：</b>展示的是所选国服赛季及配置快照。返场玩法与原赛季分开保存；部分棋盘机制为待核实候选，历史版本可能存在差异。<span>｜ 数据源：腾讯官网公开配置及研究证据</span></div>
+   <div class="source-note"><b>资料说明：</b>海克斯按官方等级分类；仅代表相应配置快照，不保证当时全部强化实际可选。返场玩法、特殊强化和历史版本独立保留，缺失数据不表示无该机制。<span>｜ 数据源：腾讯官网公开配置及研究证据</span></div>
    <footer>铲铲图鉴 · 本地历史研究库 <span>非腾讯官方运营网站 · 不展示未经验证的胜率数据</span></footer>
   </div>
  </main>

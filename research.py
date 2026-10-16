@@ -1,4 +1,4 @@
-"""金铲铲长期资料研究管线：快照 -> 候选数据 -> 人工核实 -> 四张表。
+"""金铲铲长期资料研究管线：快照 -> 候选数据 -> 人工核实 -> 五张表。
 
 只依赖 Python 标准库。不会自动把国际服资料认证为金铲铲国服事实。
 """
@@ -413,6 +413,10 @@ def diff(old_rows,new_rows,header):
             "removed":len(a.keys()-b.keys())}
 
 def build(export=True):
+    # Separate first-party per-mode, per-season augment table; generated from
+    # saved Tencent hex snapshots, never from TFT international guesses.
+    import augment_catalog
+    augment_catalog.build()
     notes,snaps=load()
     raw,counts=compile_tables(notes,snaps)
     tables=chinese_public_tables(raw,notes)
@@ -432,7 +436,7 @@ def build(export=True):
                 writer=csv.writer(f);writer.writerow(DISPLAY_HEADERS[tab]);writer.writerows(rows)
             tmp.replace(path)
     report={"generated":datetime.now(timezone.utc).isoformat(),
-        "data_scope":"金铲铲国服中文版；国际TFT参考数据仅保存在原始快照，不进入四张表",
+        "data_scope":"金铲铲国服中文版；国际TFT参考不进入五张正式表；海克斯强化来自独立官网hex快照",
         "counts":counts,"changes_since_previous_export":changes}
     (TABLES/"latest_report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
     for tab,rows in tables.items():print(f"{tab}: {len(rows)}条; delta={changes[tab]}")
@@ -448,6 +452,12 @@ def build(export=True):
                 # 用标准OOXML更新内容，保留原有筛选/冻结/格式，否则失败关闭。
                 print("Excel接口写入失败：尝试仅更新既有Excel的表格内容",file=sys.stderr)
                 subprocess.run([sys.executable,str(ROOT/"repair_xlsx_from_csv.py")],check=True)
+    if export and workbook.exists():
+        import importlib.util
+        if importlib.util.find_spec("openpyxl"):
+            subprocess.run([sys.executable,str(ROOT/"export_augments_excel.py")],check=True)
+        else:
+            print("海克斯CSV已生成；更新Excel第五张表需安装 openpyxl",file=sys.stderr)
     return report
 
 def refresh(season,patch,dry_run=False):
@@ -528,7 +538,7 @@ def mark(season, kind, key, status, source, note):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest="command",required=True)
-    buildp=sub.add_parser("build",help="从已保存快照生成4个CSV并更新Excel")
+    buildp=sub.add_parser("build",help="从已保存快照生成5个CSV并更新Excel")
     buildp.add_argument("--csv-only",action="store_true")
     sub.add_parser("status",help="查看数据覆盖与待核验数量")
     update=sub.add_parser("refresh",help="只按明确版本增量更新一个赛季")
