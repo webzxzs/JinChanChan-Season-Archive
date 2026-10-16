@@ -88,6 +88,29 @@ class WebTests(unittest.TestCase):
         _, _, raw = self.get("/api/records/units?season=%E5%9B%BD%E6%9C%8DS1%C2%B7%E5%AE%98%E6%96%B9")
         self.assertEqual(json.loads(raw)["total"],58)
 
+    def test_sidebar_uses_public_seasons_not_sdk_ids(self):
+        # Public timeline is one parent per season, internal SDK ids only children.
+        import re
+        content = (app.WEB / "gallery.js").read_text(encoding="utf-8")
+        section = content.split("const MAIN_SEASONS=[",1)[1].split("].map(",1)[0]
+        entries = re.findall(r'\["(S\d+)","([^"]+)"\]', section)
+        self.assertEqual([x[0] for x in entries], [f"S{i}" for i in range(18,0,-1)])
+        mapping = dict(entries)
+        self.assertEqual(mapping["S16"], "英雄联盟传奇")
+        self.assertEqual(mapping["S11"], "画之灵")
+        self.assertEqual(mapping["S4"], "命运之轮")
+        self.assertEqual(mapping["S2"], "元素崛起")
+        self.assertIn("missing:", content)  # Missing seasons remain selectable.
+        self.assertIn("返场／限时玩法", content)
+        self.assertIn('e.kind==="indexed"', content)
+        self.assertNotIn("const PUBLIC_SET=", content)
+        _, _, payload=self.get("/api/catalog")
+        records=json.loads(payload)["items"]
+        # Five separate SDK snapshots are one public S16 season, not 5 seasons.
+        self.assertEqual(len([r for r in records if r["kind"]=="indexed" and
+                              r["name"]=="英雄联盟传奇"]),5)
+        self.assertEqual(len([r for r in records if r["kind"]=="indexed"]),41)
+
     def test_augment_catalog_search_tier_and_season(self):
         _, _, payload=self.get("/api/summary")
         self.assertGreaterEqual(json.loads(payload)["counts"]["augments"],10000)

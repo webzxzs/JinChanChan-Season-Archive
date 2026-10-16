@@ -11,6 +11,18 @@
 .nav-search{margin:0 13px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;background:#0b111c;border:1px solid #344052;padding:0 11px;color:var(--muted);font-size:21px}
 .nav-search input{width:100%;min-width:0;padding:10px 0;background:transparent;color:#dfe6ed;border:0;outline:0;font-size:12px}
 #season-nav{overflow:auto;min-height:0;flex:1;padding:0 12px 15px;scrollbar-color:#38475b transparent;scrollbar-width:thin}
+.nav-section-label{font-size:10px;font-weight:700;letter-spacing:.08em;color:#c5a671;margin:17px 8px 9px;padding:0 0 7px;border-bottom:1px solid #334052}
+.season-line{display:flex;align-items:stretch;gap:2px;border-bottom:1px solid #263346}
+.season-primary{display:flex;align-items:center;gap:9px;min-width:0;flex:1;background:transparent;border:1px solid transparent;border-radius:7px;color:#a6bacb;padding:11px 9px;text-align:left;font-size:12px}
+.season-primary:hover,.season-expand:hover{background:#243244;color:#f4dab0}
+.season-primary.active{background:#27394d;color:#f1d2a0;border-color:#655841}
+.season-primary .season-chip{color:#d6be8f;border:1px solid #6d614d;font-size:10px;padding:3px 6px;border-radius:5px;flex:none}
+.season-primary .set-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}
+.season-primary small{flex:none;color:#8799ab;font-size:9px;font-weight:400}
+.season-primary .no-data{color:#b39979}
+.season-expand{flex:none;width:27px;color:#bd9e6d;background:none;border:0;border-radius:6px;font-size:16px}
+.season-versions{border-left:1px solid #46546a;margin:4px 0 8px 20px;padding:0 0 2px 8px}
+.season-versions .set-option{font-size:10px;padding:7px 6px}
 .set-group{margin:3px 0 7px}.group-title{width:100%;border:0;border-bottom:1px solid #263346;background:none;color:#96a8bb;text-align:left;padding:10px 11px;display:flex;align-items:center;font-size:12px;font-weight:700;gap:7px}
 .group-title>span{flex:1}.group-title small{font-weight:normal;color:#677a8e}.group-title i{font-style:normal;color:var(--gold);font-size:11px;transition:transform .2s}.set-group.collapsed .group-title i{transform:rotate(-90deg)}.set-group.collapsed .group-items{display:none}
 .set-option{width:100%;display:flex;align-items:center;gap:8px;border:1px solid transparent;border-radius:7px;background:transparent;color:#9baec0;text-align:left;padding:8px 10px;margin-top:3px;font-size:11px;line-height:1.3}.set-option:hover{background:#222e3e}.set-option.active{color:#f3daa9;border-color:#6c5e47;background:#332d28}

@@ -2,18 +2,23 @@
 const $=id=>document.getElementById(id);
 const TABS={units:"弈子一览",traits:"羁绊一览",augments:"海克斯强化",boards:"赛季机制",seasons:"赛季资料",patches:"补丁变更"};
 const KEY={units:"棋子名称",traits:"羁绊名称",augments:"强化名称",boards:"玩法名称",seasons:"赛季名称",patches:"名称"};
-// Public theme numbering is not always the same as Tencent SDK's internal S-code.
-// Preserve the underlying SDK code alongside these well-known public labels.
-const PUBLIC_SET={"自然之力":"S18","星神":"S17","英雄联盟传奇":"S16",
- "天下无双格斗大会":"S15","赛博城市":"S14","双城传说2":"S13",
- "魔法乱斗":"S12","画之灵":"S11","强音对决":"S10",
- "符文大陆传奇":"S9","怪兽入侵":"S8","巨龙之巢":"S7",
- "双城传说":"S6"};
+// Public season timeline is distinct from Tencent's internal SDK snapshot ID.
+// S1–S5 are historical/TFT-theme slots: some were never separate JCC queues.
+// Missing slots remain visible rather than inheriting a different mode's data.
+const MAIN_SEASONS=[
+ ["S18","自然之力"],["S17","星神"],["S16","英雄联盟传奇"],
+ ["S15","天下无双格斗大会"],["S14","赛博城市"],["S13","双城传说2"],
+ ["S12","魔法乱斗"],["S11","画之灵"],["S10","强音对决"],
+ ["S9","符文大陆传奇"],["S8","怪物入侵"],["S7","巨龙之巢"],
+ ["S6","双城传说"],["S5","光明与黑暗"],["S4","命运之轮"],
+ ["S3","银河战争"],["S2","元素崛起"],["S1","时空裂痕"]
+].map(([id,name])=>({id,name}));
 const state={tab:"units",season:"",query:"",trait:"",cost:"",augment:"",mechanism:"core",version:"",status:"",page:1,items:[],total:0,pages:0,showSkills:false};
 const zh=new Intl.Collator("zh-CN",{numeric:true,sensitivity:"base"});
 const prior=new URLSearchParams(location.search);
 let catalog=[],activeRequest=0,debounce=0;
 let expanded=new Set();
+let folded=new Set();
 function html(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function validImage(v){return /^https:\/\/game\.gtimg\.cn\/images\/[-a-zA-Z0-9_./%]+\.(png|webp|jpg|jpeg)(\?.*)?$/.test(v||"") ? v : "";}
 function validLink(v){try{let u=new URL(v);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch{return "";}}
@@ -35,44 +40,106 @@ function seasonRank(e){
  const raw=e.season||"";const match=raw.match(/^S(\d+)$/);
  return match?Number(match[1])*1000000:0;
 }
-function renderNav(){
- const q=$("season-query").value.trim().toLowerCase();
- const groups=new Map();
- for(const e of catalog){
-  if(q&&!((e.name+" "+e.season+" "+e.ref+" "+(PUBLIC_SET[e.name]||"")).toLowerCase().includes(q)))continue;
-  const group=e.kind==="indexed"?e.name:"历史/资料补录";
-  if(!groups.has(group))groups.set(group,[]);
-  groups.get(group).push(e);
+function seasonOf(e){
+ if(e.kind==="indexed"){
+  const main=MAIN_SEASONS.find(x=>x.name===e.name);
+  return main?.id||"";
  }
- const arr=[...groups].sort((a,b)=>{
-  const aRank=Math.max(...a[1].map(seasonRank)),bRank=Math.max(...b[1].map(seasonRank));
-  return bRank-aRank||zh.compare(a[0],b[0]);
+ // Historic national archive records, not Tencent SDK S-codes.
+ const m=(e.ref||"").match(/^国服S(1|5\.5|6)(?:·|$)/);
+ return m?({"1":"S1","5.5":"S5","6":"S6"}[m[1]]):"";
+}
+function seasonalVersions(group){
+ return catalog.filter(e=>seasonOf(e)===group.id).sort((a,b)=>{
+  const aa=Date.parse(a.date||""),bb=Date.parse(b.date||"");
+  if(Number.isFinite(aa)&&Number.isFinite(bb))return aa-bb;
+  if(Number.isFinite(aa))return -1;
+  if(Number.isFinite(bb))return 1;
+  return seasonRank(a)-seasonRank(b)||zh.compare(a.ref,b.ref);
  });
- $("season-count").textContent=String(catalog.length);
+}
+function defaultSeasonRef(group,versions){
+ // Prefer an original chronological SDK snapshot to a later return;
+ // for S1/S5.5/S6 prefer explicitly labeled national baseline records.
+ const baseline=versions.find(e=>e.kind==="historical"&&/·官方$/.test(e.ref||""));
+ return (baseline||versions[0])?.ref||"missing:"+group.id;
+}
+function versionLabel(e){
+ if(e.kind==="historical")return e.ref.replace(/^国服/, "历史 · ");
+ const returnVisit=e.name==="画之灵"&&e.season==="S100030";
+ return (e.version||"未标注补丁")+(returnVisit?" · 返场":"")+
+   " · 源 "+e.season;
+}
+function optionMarkup(e){
+ return '<button class="set-option '+(e.ref===state.season?"active":"")+
+  '" data-set="'+html(e.ref)+'" title="'+html(e.ref)+'" aria-current="'+(e.ref===state.season)+'">'+
+  '<span class="season-chip">'+html(e.kind==="indexed"?"配置":"档案")+'</span>'+
+  '<span class="set-text">'+html(versionLabel(e))+'</span>'+
+  (e.status==="unavailable"||e.status==="partial"?'<i class="incomplete" title="数据不完整"></i>':"")+
+  '</button>';
+}
+function renderNav(){
+ const nav=$("season-nav");
+ const scroll=nav.scrollTop;
+ const q=$("season-query").value.trim().toLowerCase();
+ const onlyNumber=/^s\d+(?:\.\d+)?$/.test(q);
+ const seasonRows=MAIN_SEASONS.map((group)=>{
+  const versions=seasonalVersions(group);
+  const text=[group.id,group.name,...versions.flatMap(e=>[e.season,e.version,e.ref])].join(" ").toLowerCase();
+  if(q&&(onlyNumber?group.id.toLowerCase()!==q:!text.includes(q)))return "";
+  const primary=defaultSeasonRef(group,versions);
+  const inside=state.season===primary||versions.some(e=>e.ref===state.season);
+  const showChildren=!!(q||expanded.has(group.id)||(inside&&versions.length>1))&&!folded.has(group.id);
+  return '<section class="set-group main-season">'+
+   '<div class="season-line"><button class="season-primary '+(inside?"active":"")+
+   '" data-set="'+html(primary)+'" aria-current="'+inside+'">'+
+   '<span class="season-chip">'+group.id+'</span><span class="set-text">'+html(group.name)+'</span>'+
+   (versions.length?'<small>'+versions.length+' 配置</small>':'<small class="no-data">待补数据</small>')+
+   '</button>'+(versions.length>1?'<button class="season-expand" data-toggle="'+group.id+
+   '" aria-label="展开'+html(group.name)+'的历史配置" aria-expanded="'+!!showChildren+'">'+
+   (showChildren?"▾":"▸")+'</button>':'')+'</div>'+
+   (versions.length>1&&showChildren?'<div class="group-items season-versions">'+
+     versions.map(optionMarkup).join("")+'</div>':"")+'</section>';
+ }).filter(Boolean);
+ const specials=catalog.filter(e=>!seasonOf(e)).filter(e=>!onlyNumber&&
+  (!q||[e.name,e.ref,e.season,e.version].join(" ").toLowerCase().includes(q)));
+ const otherGroups=new Map();
+ for(const e of specials){
+  const label=e.kind==="indexed"?e.name:
+   (e.ref.includes("返场")?"返场补录":"历史补充档案");
+  if(!otherGroups.has(label))otherGroups.set(label,[]);
+  otherGroups.get(label).push(e);
+ }
+ $("season-count").textContent=MAIN_SEASONS.length+" 赛季";
  $("all-sets").classList.toggle("active",!state.season);
- $("season-nav").innerHTML=arr.map(([name,entries],i)=>{
-  entries.sort((a,b)=>seasonRank(b)-seasonRank(a)||zh.compare(b.season||"",a.season||""));
-  const inside=entries.some(e=>e.ref===state.season);
-  const isOpen=q||inside||expanded.has(name)||i<2;
-  return '<section class="set-group '+(isOpen?"":"collapsed")+'"><button class="group-title" data-toggle="'+html(name)+'">'+
-    '<span>'+html(name)+'</span><small>'+entries.length+' 版本</small><i>▾</i></button>'+
-    '<div class="group-items">'+entries.map(e=>
-      '<button class="set-option '+(e.ref===state.season?"active":"")+'" data-set="'+html(e.ref)+'" title="'+html(e.ref)+'" aria-current="'+(e.ref===state.season)+'">'+
-      '<span class="season-chip">'+html(PUBLIC_SET[e.name]||e.season||"档案")+'</span><span class="set-text">'+html(e.kind==="indexed"?((e.version||e.name)+" · 源 "+e.season):e.name)+'</span>'+
-      (e.status==="unavailable"||e.status==="partial"?'<i class="incomplete" title="历史数据不完整"></i>':"")+'</button>').join("")+
-    '</div></section>';
- }).join("")||'<div class="skeleton">没有找到对应赛季</div>';
+ nav.innerHTML=
+  (seasonRows.length?'<div class="nav-section-label">正式赛季 · S18 → S1</div>'+seasonRows.join(""):"")+
+  (otherGroups.size?'<div class="nav-section-label">返场／限时玩法 · 历史补录</div>'+
+   [...otherGroups].sort((a,b)=>zh.compare(a[0],b[0])).map(([name,entries])=>{
+    entries.sort((a,b)=>seasonRank(b)-seasonRank(a));
+    const inside=entries.some(e=>e.ref===state.season),key="extra:"+name;
+    const open=!!q||expanded.has(key)||inside;
+    return '<section class="set-group '+(open?"":"collapsed")+'">'+
+      '<button class="group-title" data-toggle="'+html(key)+'"><span>'+html(name)+'</span>'+
+      '<small>'+entries.length+' 配置</small><i>▾</i></button>'+
+      '<div class="group-items">'+entries.map(optionMarkup).join("")+'</div></section>';
+   }).join(""):"")||
+  '<div class="skeleton">没有找到对应赛季</div>';
+ nav.scrollTop=scroll;
 }
 function setHeading(){
  const e=catalog.find(e=>e.ref===state.season);
- $("breadcrumb").textContent=e?e.name:"全部赛季";
- $("season-name").textContent=e?e.name:"全赛季图鉴";
+ const main=MAIN_SEASONS.find(x=>x.id===(e?seasonOf(e):state.season.replace("missing:","")));
+ $("breadcrumb").textContent=main?main.id+" · "+main.name:e?e.name:"全部赛季";
+ $("season-name").textContent=main?main.name:e?e.name:"全赛季图鉴";
  $("season-desc").textContent=e?
-  "按该模式独立版本查看弈子、羁绊及完整效果；与其他赛季和返场数值分开记录。":
-  "包含从首发到当前的国服赛季、限时玩法与返场模式，支持跨赛季检索。";
- $("season-tag").textContent=e?(PUBLIC_SET[e.name]||e.season||"历史研究")+" · 源索引 "+(e.season||"—")+" · 模式 "+(e.mode||"历史"):"所有历史模式";
- $("season-version").textContent=e&&e.version?"配置 "+e.version:"官方历史资料与多版本快照";
- $("season-availability").textContent=e&&e.status==="unavailable"?"历史配置缺失":(e&&e.status==="partial"?"部分数据缺失":
+  "所选配置版本的棋子、羁绊和规则；源版本编号不等于正式赛季编号。":
+  (main?"该历史赛季暂缺可用配置，资料正在补录。":"按公开赛季时间线浏览，返场与内部快照单独展示。");
+ $("season-tag").textContent=e?(main?main.id+" · ":"特别玩法 · ")+
+  (e.kind==="indexed"?"源索引 "+e.season+" · 模式 "+e.mode:"独立历史档案"):
+  main?main.id+" · 数据缺失":"正式赛季 S1–S18";
+ $("season-version").textContent=e&&e.version?"配置 "+e.version:e?"历史资料快照":"尚无可用配置";
+ $("season-availability").textContent=!e&&main?"待补数据":e&&e.status==="unavailable"?"历史配置缺失":(e&&e.status==="partial"?"部分数据缺失":
   (state.tab==="augments"&&e&&e.augment_status&&e.augment_count===0?e.augment_status:""));
  renderSignature(e);
 }
@@ -297,7 +364,15 @@ function closeDrawer(){$("drawer").hidden=true;$("shade").hidden=true;document.b
 function bind(){
  $("season-nav").addEventListener("click",e=>{
   const toggle=e.target.closest("[data-toggle]");
-  if(toggle){const v=toggle.dataset.toggle;expanded.has(v)?expanded.delete(v):expanded.add(v);renderNav();return;}
+  if(toggle){const v=toggle.dataset.toggle;
+   if(folded.has(v)){folded.delete(v);expanded.add(v);}
+   else if(expanded.has(v)){expanded.delete(v);folded.add(v);}
+   else if(v.startsWith("S")&&MAIN_SEASONS.some(x=>x.id===v)&&
+       seasonalVersions(MAIN_SEASONS.find(x=>x.id===v)).some(x=>x.ref===state.season)){
+     folded.add(v);
+   }else expanded.add(v);
+   renderNav();return;
+  }
   const option=e.target.closest("[data-set]");if(option)chooseSeason(option.dataset.set);
  });
  $("all-sets").addEventListener("click",()=>chooseSeason(""));
